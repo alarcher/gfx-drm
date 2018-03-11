@@ -44,7 +44,7 @@ def all install install_h: .patched check
 # you would not notice changes when updating to a newer version
 # of the libdrm code, and fail to make necessary updates.
 #
-KDRM_HDRS= drm.h drm_fourcc.h drm_mode.h drm_sarea.h i915_drm.h
+KDRM_HDRS= drm.h drm_sarea.h i915_drm.h
 check: FRC
 	@echo "You should see: No differences ... (5x)"
 	for f in $(KDRM_HDRS) ; do \

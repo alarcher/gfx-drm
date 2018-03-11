@@ -35,10 +35,70 @@
  * authorization from the copyright holder(s) and author(s).
  */
 
-#include "drmP.h"
-#include "drm.h"
-#include "drm_crtc.h"
-#include "drm_linux_list.h"
+#include <drm/drmP.h>
+#include <drm/drm_linux_list.h>
+#include <drm/drm_crtc.h>
+#include <drm/drm_modes.h>
+
+
+/**
+ * drm_mode_create - create a new display mode
+ * @dev: DRM device
+ *
+ *
+ * Create a new drm_display_mode, give it an ID, and return it.
+ *
+ * RETURNS:
+ * Pointer to new mode on success, NULL on error.
+ */
+struct drm_display_mode *drm_mode_create(struct drm_device *dev)
+{
+	struct drm_display_mode *nmode;
+
+	nmode = kzalloc(sizeof(struct drm_display_mode), GFP_KERNEL);
+	if (!nmode)
+		return NULL;
+
+	if (drm_mode_object_get(dev, &nmode->base, DRM_MODE_OBJECT_MODE)) {
+		kfree(nmode, sizeof(struct drm_display_mode));
+		return NULL;
+	}
+
+	return nmode;
+}
+
+/**
+ * drm_mode_destroy - remove a mode
+ * @dev: DRM device
+ * @mode: mode to remove
+ *
+ *
+ * Free @mode's unique identifier, then free it.
+ */
+void drm_mode_destroy(struct drm_device *dev, struct drm_display_mode *mode)
+{
+	if (!mode)
+		return;
+
+	drm_mode_object_put(dev, &mode->base);
+
+	kfree(mode, sizeof(struct drm_display_mode));
+}
+
+/**
+ * drm_mode_probed_add - add a mode to a connector's probed mode list
+ * @connector: connector the new mode
+ * @mode: mode data
+ *
+ *
+ * Add @mode to @connector's mode list for later use.
+ */
+void drm_mode_probed_add(struct drm_connector *connector,
+			 struct drm_display_mode *mode)
+{
+	list_add_tail(&mode->head, &connector->probed_modes, (caddr_t)mode);
+}
+
 /**
  * drm_mode_debug_printmodeline - debug print a mode
  * @dev: DRM device
@@ -594,26 +654,6 @@ void drm_mode_set_name(struct drm_display_mode *mode)
 }
 
 /**
- * drm_mode_list_concat - move modes from one list to another
- * @head: source list
- * @new: dst list
- *
- * LOCKING:
- * Caller must ensure both lists are locked.
- *
- * Move all the modes from @head to @new.
- */
-void drm_mode_list_concat(struct list_head *head, struct list_head *new)
-{
-
-	struct list_head *entry, *tmp;
-
-	list_for_each_safe(entry, tmp, head) {
-		list_move_tail(entry, new, (caddr_t)entry);
-	}
-}
-
-/**
  * drm_mode_width - get the width of a mode
  * @mode: mode
  *
@@ -1137,4 +1177,77 @@ drm_mode_create_from_cmdline_mode(struct drm_device *dev,
 
 	drm_mode_set_crtcinfo(mode, CRTC_INTERLACE_HALVE_V);
 	return mode;
+}
+
+
+/**
+ * drm_crtc_convert_to_umode - convert a drm_display_mode into a modeinfo
+ * @out: drm_mode_modeinfo struct to return to the user
+ * @in: drm_display_mode to use
+ *
+ *
+ * Convert a drm_display_mode into a drm_mode_modeinfo structure to return to
+ * the user.
+ */
+static void drm_crtc_convert_to_umode(struct drm_mode_modeinfo *out,
+				      const struct drm_display_mode *in)
+{
+	if (in->hdisplay > USHRT_MAX || in->hsync_start > USHRT_MAX ||
+	     in->hsync_end > USHRT_MAX || in->htotal > USHRT_MAX ||
+	     in->hskew > USHRT_MAX || in->vdisplay > USHRT_MAX ||
+	     in->vsync_start > USHRT_MAX || in->vsync_end > USHRT_MAX ||
+	     in->vtotal > USHRT_MAX || in->vscan > USHRT_MAX)
+		DRM_ERROR("timing values too large for mode info\n");
+
+	out->clock = in->clock;
+	out->hdisplay = in->hdisplay;
+	out->hsync_start = in->hsync_start;
+	out->hsync_end = in->hsync_end;
+	out->htotal = in->htotal;
+	out->hskew = in->hskew;
+	out->vdisplay = in->vdisplay;
+	out->vsync_start = in->vsync_start;
+	out->vsync_end = in->vsync_end;
+	out->vtotal = in->vtotal;
+	out->vscan = in->vscan;
+	out->vrefresh = in->vrefresh;
+	out->flags = in->flags;
+	out->type = in->type;
+	(void) strncpy(out->name, in->name, DRM_DISPLAY_MODE_LEN);
+	out->name[DRM_DISPLAY_MODE_LEN-1] = 0;
+}
+
+/**
+ * drm_crtc_convert_to_umode - convert a modeinfo into a drm_display_mode
+ * @out: drm_display_mode to return to the user
+ * @in: drm_mode_modeinfo to use
+ *
+ *
+ * Convert a drm_mode_modeinfo into a drm_display_mode structure to return to
+ * the caller.
+ */
+static int drm_crtc_convert_umode(struct drm_display_mode *out,
+				  const struct drm_mode_modeinfo *in)
+{
+	if (in->clock > INT_MAX || in->vrefresh > INT_MAX)
+		return -ERANGE;
+
+	out->clock = in->clock;
+	out->hdisplay = in->hdisplay;
+	out->hsync_start = in->hsync_start;
+	out->hsync_end = in->hsync_end;
+	out->htotal = in->htotal;
+	out->hskew = in->hskew;
+	out->vdisplay = in->vdisplay;
+	out->vsync_start = in->vsync_start;
+	out->vsync_end = in->vsync_end;
+	out->vtotal = in->vtotal;
+	out->vscan = in->vscan;
+	out->vrefresh = in->vrefresh;
+	out->flags = in->flags;
+	out->type = in->type;
+	(void) strncpy(out->name, in->name, DRM_DISPLAY_MODE_LEN);
+	out->name[DRM_DISPLAY_MODE_LEN-1] = 0;
+
+	return 0;
 }

@@ -366,4 +366,21 @@ int drm_av_sync_delay(struct drm_connector *connector,
 struct drm_connector *drm_select_eld(struct drm_encoder *encoder,
 				     struct drm_display_mode *mode);
 
+bool drm_probe_ddc(struct i2c_adapter *adapter);
+struct edid *drm_get_edid(struct drm_connector *connector,
+				struct i2c_adapter *adapter);
+int drm_add_edid_modes(struct drm_connector *connector, struct edid *edid);
+u8 drm_match_cea_mode(const struct drm_display_mode *to_match);
+bool drm_detect_hdmi_monitor(struct edid *edid);
+bool drm_detect_monitor_audio(struct edid *edid);
+bool drm_rgb_quant_range_selectable(struct edid *edid);
+int drm_add_modes_noedid(struct drm_connector *connector,
+				int hdisplay, int vdisplay);
+int drm_edid_header_is_valid(const u8 *raw_edid);
+bool drm_edid_block_valid(u8 *raw_edid, int block, bool print_bad_edid);
+bool drm_edid_is_valid(struct edid *edid);
+struct drm_display_mode *drm_mode_find_dmt(struct drm_device *dev,
+					   int hsize, int vsize, int fresh,
+					   bool rb);
+
 #endif /* __DRM_EDID_H__ */

@@ -44,7 +44,7 @@
 static int drm_open_helper(struct drm_minor *minor,
 			int clone_id, int flags, cred_t *credp);
 
-static __inline__ int drm_device_is_agp(struct drm_device *dev)
+static int drm_device_is_agp(struct drm_device *dev)
 {
 	if (drm_core_check_feature(dev, DRIVER_USE_PLATFORM_DEVICE))
 		return 0;
@@ -57,6 +57,49 @@ static __inline__ int drm_device_is_agp(struct drm_device *dev)
 	}
 
 	return pci_find_capability(dev->pdev, PCI_CAP_ID_AGP);
+}
+
+static int drm_mode_group_init(struct drm_device *dev, struct drm_mode_group *group)
+{
+	uint32_t total_objects = 0;
+
+	total_objects += dev->mode_config.num_crtc;
+	total_objects += dev->mode_config.num_connector;
+	total_objects += dev->mode_config.num_encoder;
+
+	group->id_list = kzalloc(total_objects * sizeof(uint32_t), GFP_KERNEL);
+	if (!group->id_list)
+		return -ENOMEM;
+
+	group->num_crtcs = 0;
+	group->num_connectors = 0;
+	group->num_encoders = 0;
+	return 0;
+}
+
+static int drm_mode_group_init_legacy_group(struct drm_device *dev,
+				     struct drm_mode_group *group)
+{
+	struct drm_crtc *crtc;
+	struct drm_encoder *encoder;
+	struct drm_connector *connector;
+	int ret;
+
+	if ((ret = drm_mode_group_init(dev, group)))
+		return ret;
+
+	list_for_each_entry(crtc, struct drm_crtc, &dev->mode_config.crtc_list, head)
+		group->id_list[group->num_crtcs++] = crtc->base.id;
+
+	list_for_each_entry(encoder, struct drm_encoder, &dev->mode_config.encoder_list, head)
+		group->id_list[group->num_crtcs + group->num_encoders++] =
+		encoder->base.id;
+
+	list_for_each_entry(connector, struct drm_connector, &dev->mode_config.connector_list, head)
+		group->id_list[group->num_crtcs + group->num_encoders +
+			       group->num_connectors++] = connector->base.id;
+
+	return 0;
 }
 
 static int drm_setup(struct drm_device * dev)

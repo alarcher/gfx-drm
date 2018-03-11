@@ -18,8 +18,6 @@ include ../../../Makefile.master
 
 HDRS=	\
 	drm.h		\
-	drm_fourcc.h	\
-	drm_mode.h	\
 	drm_os_solaris.h \
 	drm_sarea.h	\
 	i915_drm.h

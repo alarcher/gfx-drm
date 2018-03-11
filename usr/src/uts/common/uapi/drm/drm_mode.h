@@ -24,10 +24,10 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef _DRM_MODE_H
-#define _DRM_MODE_H
+#ifndef DRM_MODE_H
+#define DRM_MODE_H
 
-#include "drm.h"
+#include <drm/drm.h>
 
 #if defined(__cplusplus)
 extern "C" {
@@ -47,7 +47,15 @@ extern "C" {
 #define DRM_MODE_TYPE_DRIVER	(1<<6)
 
 /* Video mode flags */
-/* bit compatible with the xorg definitions. */
+/* bit compatible with the xrandr RR_ definitions (bits 0-13)
+ *
+ * ABI warning: Existing userspace really expects
+ * the mode flags to match the xrandr definitions. Any
+ * changes that don't match the xrandr definitions will
+ * likely need a new client cap or some other mechanism
+ * to avoid breaking existing userspace. This includes
+ * allocating new flags in the previously unused bits!
+ */
 #define DRM_MODE_FLAG_PHSYNC			(1<<0)
 #define DRM_MODE_FLAG_NHSYNC			(1<<1)
 #define DRM_MODE_FLAG_PVSYNC			(1<<2)
@@ -77,6 +85,10 @@ extern "C" {
 #define  DRM_MODE_FLAG_3D_TOP_AND_BOTTOM	(7<<14)
 #define  DRM_MODE_FLAG_3D_SIDE_BY_SIDE_HALF	(8<<14)
 
+/* Picture aspect ratio options */
+#define DRM_MODE_PICTURE_ASPECT_NONE	0
+#define DRM_MODE_PICTURE_ASPECT_4_3	1
+#define DRM_MODE_PICTURE_ASPECT_16_9	2
 
 /* DPMS flags */
 /* bit compatible with the xorg definitions. */
@@ -664,4 +676,4 @@ struct drm_mode_destroy_blob {
 }
 #endif
 
-#endif
+#endif /* DRM_MODE_H */

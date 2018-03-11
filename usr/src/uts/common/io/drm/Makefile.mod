@@ -32,6 +32,8 @@ DRM_OBJS = ati_pcigart.o \
 	drm_auth.o \
 	drm_bufs.o \
 	drm_cache.o \
+	drm_color_mgmt.o \
+	drm_connector.o \
 	drm_context.o \
 	drm_crtc.o \
 	drm_crtc_helper.o \
@@ -39,9 +41,13 @@ DRM_OBJS = ati_pcigart.o \
 	drm_dp_helper.o \
 	drm_dp_i2c_helper.o \
 	drm_drv.o \
+	drm_dumb_buffers.o \
 	drm_edid.o \
+	drm_encoders.o \
 	drm_fb_helper.o \
 	drm_fops.o \
+	drm_fourcc.o \
+	drm_framebuffer.o \
 	drm_gem.o \
 	drm_io32.o \
 	drm_ioctl.o \
@@ -51,9 +57,15 @@ DRM_OBJS = ati_pcigart.o \
 	drm_lock.o \
 	drm_memory.o \
 	drm_mm.o \
+	drm_mode_config.o \
+	drm_mode_object.o \
 	drm_modes.o \
+	drm_modeset_helper.o \
+	drm_modeset_lock.o \
 	drm_msg.o \
 	drm_pci.o \
+	drm_plane.o \
+	drm_property.o \
 	drm_rect.o \
 	drm_scatter.o \
 	drm_stub.o \
