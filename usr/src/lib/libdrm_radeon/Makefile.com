@@ -31,7 +31,7 @@ VERS=		.1
 # See common/libdrm/libdrm-*/radeon/Makefile.in am__objects
 OBJECTS= \
 	radeon_bo_gem.o radeon_cs_gem.o radeon_cs_space.o \
-	radeon_bo.o radeon_cs.o radeon_surface.o
+	radeon_bo.o radeon_cs.o radeon_surface.o bof.o
 
 include ../../Makefile.lib
 include $(SRC)/common/libdrm/Makefile.drm

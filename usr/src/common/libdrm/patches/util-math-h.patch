@@ -1,11 +1,10 @@
-diff ... libdrm-2.4.67/util_math.h
---- libdrm-2.4.67/util_math.h.~1~	Fri Oct 23 13:58:02 2015
-+++ libdrm-2.4.67/util_math.h	Sat Oct 29 20:59:51 2016
+--- libdrm-2.4.99/util_math.h.orig	2019-08-16 15:50:46.134906808 +0000
++++ libdrm-2.4.99/util_math.h	2019-08-16 15:57:45.952387271 +0000
 @@ -29,6 +29,6 @@
  #define MAX3( A, B, C ) ((A) > (B) ? MAX2(A, C) : MAX2(B, C))
  
  #define __align_mask(value, mask)  (((value) + (mask)) & ~(mask))
--#define ALIGN(value, alignment)    __align_mask(value, (typeof(value))((alignment) - 1))
+-#define ALIGN(value, alignment)    __align_mask(value, (__typeof__(value))((alignment) - 1))
 +#define ALIGN(value, alignment)    __align_mask(value, (__typeof(value))((alignment) - 1))
  
  #endif /*_UTIL_MATH_H_*/

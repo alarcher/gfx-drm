@@ -30,9 +30,9 @@ VERS=		.1
 
 # See common/libdrm/libdrm-*/amdgpu/Makefile.in am__objects
 OBJECTS= \
-	amdgpu_bo.o amdgpu_cs.o amdgpu_device.o \
-	amdgpu_gpu_info.o amdgpu_vamgr.o util_hash.o \
-	util_hash_table.o
+	amdgpu_asic_id.o amdgpu_bo.o amdgpu_cs.o amdgpu_device.o \
+	amdgpu_gpu_info.o amdgpu_vamgr.o amdgpu_vm.o \
+	handle_table.o
 
 include ../../Makefile.lib
 include $(SRC)/common/libdrm/Makefile.drm
@@ -46,6 +46,7 @@ SRCS =		$(OBJECTS:%.o=$(SRCDIR)/%.c)
 
 CPPFLAGS +=	-I$(LIBDRM_CMN_DIR)
 CPPFLAGS +=	-I$(LIBDRM_CMN_DIR)/amdgpu
+CPPFLAGS +=	-DAMDGPU_ASIC_ID_TABLE=\"$(LIBDRM_CMN_DIR)/data/amdgpu.ids\"
 
 LDLIBS32 +=	-L$(ROOT)/usr/lib/xorg
 LDLIBS64 +=	-L$(ROOT)/usr/lib/xorg/$(MACH64)

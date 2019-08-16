@@ -22,9 +22,11 @@ SRCDIR= $(LIBDRM_CMN_DIR)/tests/modeprint
 
 LDLIBS	 +=	-ldrm -lm
 
-LDLIBS32 +=	-L$(ROOT)/usr/lib/xorg \
+LDLIBS32 +=	$(LIBUTIL32) \
+		-L$(ROOT)/usr/lib/xorg \
 		-R/usr/lib/xorg
-LDLIBS64 +=	-L$(ROOT)/usr/lib/xorg/$(MACH64) \
+LDLIBS64 +=	$(LIBUTIL64) \
+		-L$(ROOT)/usr/lib/xorg/$(MACH64) \
 		-R/usr/lib/xorg/$(MACH64)
 
 all:	 $(PROG)

@@ -1,7 +1,6 @@
-diff ... libdrm-2.4.73/freedreno/kgsl/kgsl_bo.c
---- libdrm-2.4.73-ref/freedreno/kgsl/kgsl_bo.c	Wed Aug 24 12:57:41 2016
-+++ libdrm-2.4.73/freedreno/kgsl/kgsl_bo.c	Sat Dec 31 12:27:53 2016
-@@ -32,7 +32,5 @@
+--- libdrm-2.4.99/freedreno/kgsl/kgsl_bo.c.orig	2019-07-02 20:36:50.000000000 +0000
++++ libdrm-2.4.99/freedreno/kgsl/kgsl_bo.c	2019-08-16 14:49:10.908057274 +0000
+@@ -28,8 +28,6 @@
  
  #include "kgsl_priv.h"
  
@@ -9,16 +8,4 @@ diff ... libdrm-2.4.73/freedreno/kgsl/kgsl_bo.c
 -
  static int set_memtype(struct fd_device *dev, uint32_t handle, uint32_t flags)
  {
-diff ... libdrm-2.4.73/freedreno/kgsl/kgsl_ringbuffer.c
---- libdrm-2.4.73-ref/freedreno/kgsl/kgsl_ringbuffer.c	Mon Nov 14 12:55:20 2016
-+++ libdrm-2.4.73/freedreno/kgsl/kgsl_ringbuffer.c	Sat Dec 31 18:02:19 2016
-@@ -146,7 +146,8 @@
- 		ibdesc.gpuaddr = kgsl_ring->bo->gpuaddr;
- 		ibdesc.hostptr = kgsl_ring->bo->hostptr;
- 		ibdesc.sizedwords = 0x145;
--		req.timestamp = (uint32_t)kgsl_ring->bo->hostptr;
-+		/* This way to avoid GCC -Wpointer-to-int-cast */
-+		req.timestamp = (unsigned int) (unsigned long) kgsl_ring->bo->hostptr;
- 	}
- 
- 	do {
+ 	struct drm_kgsl_gem_memtype req = {
