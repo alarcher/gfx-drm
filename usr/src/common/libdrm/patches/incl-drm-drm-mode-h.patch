@@ -1,0 +1,10 @@
+--- libdrm-2.4.99/include/drm/drm_mode.h.orig	2019-08-16 17:09:08.426558416 +0000
++++ libdrm-2.4.99/include/drm/drm_mode.h	2019-08-16 17:15:25.227620831 +0000
+@@ -33,6 +33,7 @@
+ extern "C" {
+ #endif
+ 
++#define DRM_DISPLAY_INFO_LEN	32
+ #define DRM_CONNECTOR_NAME_LEN	32
+ #define DRM_DISPLAY_MODE_LEN	32
+ #define DRM_PROP_NAME_LEN	32

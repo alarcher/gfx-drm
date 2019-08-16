@@ -27,7 +27,7 @@
 # build script and other tools for construction and packaging of releases.
 # This script is sourced by 'nightly' and 'bldenv' to set up the environment.
 # See illumos-gate/usr/src/tools/env for details.
-export NIGHTLY_OPTIONS='-DCFlnpr'
+export NIGHTLY_OPTIONS='-nmrtN'
 
 # CODEMGR_WS - where is your workspace
 export CODEMGR_WS=`git rev-parse --show-toplevel`

@@ -1,8 +1,6 @@
-diff --git a/xf86drmMode.c b/xf86drmMode.c
-index c809c44..715f23a 100644
---- libdrm-2.4.64/xf86drmMode.c.~1~	2015-09-14 10:33:51.340507095 +0300
-+++ libdrm-2.4.64/xf86drmMode.c	2015-09-14 10:36:09.881744836 +0300
-@@ -850,7 +850,9 @@
+--- libdrm-2.4.99/xf86drmMode.c.orig	2019-07-02 20:36:50.000000000 +0000
++++ libdrm-2.4.99/xf86drmMode.c	2019-08-16 16:36:59.064063894 +0000
+@@ -852,7 +852,9 @@
  	drmClose(fd);
  	return 0;
  #endif
@@ -12,4 +10,4 @@ index c809c44..715f23a 100644
 +	return 0;
  }
  
- int drmModeCrtcGetGamma(int fd, uint32_t crtc_id, uint32_t size,
+ drm_public int drmModeCrtcGetGamma(int fd, uint32_t crtc_id, uint32_t size,

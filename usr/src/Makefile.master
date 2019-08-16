@@ -105,7 +105,7 @@ CLOSED=		$(SRC)/../closed
 # BUILD_TOOLS is the root of all tools including compilers.
 # ONBLD_TOOLS is the root of all the tools that are part of SUNWonbld.
 
-BUILD_TOOLS=		/ws/onnv-tools
+BUILD_TOOLS=		/opt
 ONBLD_TOOLS=		$(BUILD_TOOLS)/onbld
 TOOLS=			$(SRC)/tools
 TOOLS_PROTO=		$(TOOLS)/proto/root_$(MACH)-nd

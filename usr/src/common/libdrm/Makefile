@@ -23,12 +23,12 @@ FETCH=	$(PYTHON) $(SRC)/tools/userland-fetch
 
 # See also: ./Makefile.drm LIBDRM_VERS and ./Check-patches
 # PLEASE RUN Check-patches after updating!
-LIBDRM_VERS=2.4.75
+LIBDRM_VERS=2.4.99
 
 LIBDRM_DIR=libdrm-$(LIBDRM_VERS)
 LIBDRM_ARCHIVE=$(LIBDRM_DIR).tar.bz2
 LIBDRM_URL=http://dri.freedesktop.org/libdrm/$(LIBDRM_ARCHIVE)
-LIBDRM_HASH=sha256:2d5a500eef412cc287d12268eed79d571e262d4957a2ec9258073f305985054f
+LIBDRM_HASH=sha256:4dbf539c7ed25dbb2055090b77ab87508fc46be39a9379d15fed4b5517e1da5e
 
 def all install install_h: .patched check
 
